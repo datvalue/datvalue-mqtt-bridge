@@ -61,15 +61,17 @@ client.on('message', async (topic, message) => {
     const machineName = parts[2] || 'Makine-1';
     const data = payload.d || payload;
 
-    // UTC+3 Türkiye saati (3*60*60*1000 = 10800000 ms)
+    // Weintek ts değeri zaten TR saati (UTC+3) gönderiyor
     const now = new Date();
     const TR_OFFSET = 3 * 60 * 60 * 1000;
     let recDate, recTime;
     if(payload.ts){
-      const ts = new Date(new Date(payload.ts).getTime() + TR_OFFSET);
-      recDate = ts.toISOString().split('T')[0];
-      recTime = ts.toISOString().split('T')[1].substring(0,8);
+      // Weintek TR saati gönderiyor, direkt kullan
+      const tsStr = payload.ts.replace('T',' ').substring(0,19);
+      recDate = tsStr.substring(0,10);
+      recTime = tsStr.substring(11,19);
     } else {
+      // Sistem saati UTC, +3 ekle
       const trNow = new Date(now.getTime() + TR_OFFSET);
       recDate = trNow.toISOString().split('T')[0];
       recTime = trNow.toISOString().split('T')[1].substring(0,8);
