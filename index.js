@@ -61,13 +61,18 @@ client.on('message', async (topic, message) => {
     const machineName = parts[2] || 'Makine-1';
     const data = payload.d || payload;
 
-    const now     = new Date();
-    const recDate = payload.ts
-      ? new Date(payload.ts).toISOString().split('T')[0]
-      : now.toISOString().split('T')[0];
-    const recTime = payload.ts
-      ? new Date(payload.ts).toTimeString().substring(0, 8)
-      : now.toTimeString().substring(0, 8);
+    // UTC+3 Türkiye saati
+    const now = new Date();
+    const trNow = new Date(now.getTime() + 3*60*60*1000);
+    let recDate, recTime;
+    if(payload.ts){
+      const ts = new Date(new Date(payload.ts).getTime() + 3*60*60*1000);
+      recDate = ts.toISOString().split('T')[0];
+      recTime = ts.toISOString().split('T')[1].substring(0,8);
+    } else {
+      recDate = trNow.toISOString().split('T')[0];
+      recTime = trNow.toISOString().split('T')[1].substring(0,8);
+    }
 
     const record = {
       user_id:                      USER_ID,
