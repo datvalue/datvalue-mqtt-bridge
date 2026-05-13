@@ -4,7 +4,7 @@ const fetch = require('node-fetch');
 const MQTT_BROKER  = 'mqtt://broker.emqx.io:1883';
 const MQTT_TOPIC   = 'datvalue/#';
 const SUPABASE_URL = 'https://kqjpfujvccggzanibinm.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtxanBmdWp2Y2NnZ3phbmliaW5tIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1MTUzMzQsImV4cCI6MjA5NDA5MTMzNH0.pzTb0E81wDx_HutsOsMsfNx57JY93jcVe2P4lwsKCaE';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtxanBmdWp2Y2NnZ3phbmliaW5tIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3ODUxNTMzNCwiZXhwIjoyMDk0MDkxMzM0fQ.1PmkFuq7D0v4dEMHwuLArUvR9UXK8t8kh-p7WICwMs8';
 const USER_ID      = 'f9637548-53a5-4bfc-b63f-0d632cdd960d';
 
 // Weintek [ 1 ] veya "[4]" veya 5 → sayıya çevir
