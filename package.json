@@ -1,0 +1,13 @@
+{
+  "name": "datvalue-nodered",
+  "version": "1.0.0",
+  "description": "DATVALUE MQTT to Supabase bridge",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "mqtt": "^5.0.0",
+    "node-fetch": "^2.7.0"
+  }
+}
