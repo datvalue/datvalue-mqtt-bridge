@@ -7,12 +7,28 @@ const SUPABASE_URL = 'https://kqjpfujvccggzanibinm.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtxanBmdWp2Y2NnZ3phbmliaW5tIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1MTUzMzQsImV4cCI6MjA5NDA5MTMzNH0.pzTb0E81wDx_HutsOsMsfNx57JY93jcVe2P4lwsKCaE';
 const USER_ID      = 'f9637548-53a5-4bfc-b63f-0d632cdd960d';
 
-// Weintek array veya sayıyı düzgün parse et
+// Weintek [ 1 ] veya "[4]" veya 5 → sayıya çevir
 function parseVal(v) {
   if (v === null || v === undefined) return null;
-  if (Array.isArray(v)) return v.length > 0 ? parseFloat(v[0]) : null;
-  if (typeof v === 'string') return parseFloat(v) || null;
-  return parseFloat(v) || null;
+  // String ise köşeli parantezleri temizle: "[4]" → "4"
+  if (typeof v === 'string') {
+    v = v.replace(/[\[\]]/g, '').trim();
+    const n = parseFloat(v);
+    return isNaN(n) ? null : n;
+  }
+  // Array ise ilk elemanı al
+  if (Array.isArray(v)) {
+    if (v.length === 0) return null;
+    const first = v[0];
+    if (typeof first === 'string') {
+      const n = parseFloat(first.replace(/[\[\]]/g, '').trim());
+      return isNaN(n) ? null : n;
+    }
+    const n = parseFloat(first);
+    return isNaN(n) ? null : n;
+  }
+  const n = parseFloat(v);
+  return isNaN(n) ? null : n;
 }
 
 console.log('DATVALUE MQTT Bridge baslatiliyor...');
@@ -40,13 +56,9 @@ client.on('message', async (topic, message) => {
 
   try {
     const payload = JSON.parse(message.toString());
-    console.log('Payload:', JSON.stringify(payload));
-
     const parts       = topic.split('/');
     const companyName = parts[1] || 'Varsayilan';
     const machineName = parts[2] || 'Makine-1';
-
-    // Weintek "d" objesi içinde gönderiyor
     const data = payload.d || payload;
 
     const now     = new Date();
@@ -88,7 +100,7 @@ client.on('message', async (topic, message) => {
     });
 
     if (res.status === 201 || res.status === 200) {
-      console.log('Supabase kaydedildi:', companyName, '/', machineName, recDate, recTime);
+      console.log('Kaydedildi:', companyName, '/', machineName, recDate, recTime);
     } else {
       const err = await res.text();
       console.error('Supabase hatasi:', res.status, err);
